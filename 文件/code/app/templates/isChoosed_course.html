@@ -1,0 +1,117 @@
+{% extends 'base.html' %}
+
+{% block title %}已选课程{% endblock %}
+
+{% block page_content %}
+<div class="choose-class-wrap table-wrapper">
+    <div class="head">
+        <span class="title">已选课程</span>
+        <form class="form-inline my-2 my-lg-0">
+            <input class="form-control mr-sm-2 search-input" type="search" placeholder="输入课程号" aria-label="Search">
+            <button class="btn btn-outline-success my-2 my-sm-0 search-btn">搜索</button>
+        </form>
+    </div>
+
+    <table class="table table-hover">
+        <thead>
+            <tr>
+                <th scope="col">#</th>
+                <th scope="col">课程名称</th>
+                <th scope="col">课程号</th>
+                <th scope="col">学分</th>
+                <th scope="col">学时</th>
+                <th scope="col">任教老师</th>
+                <th scope="col">操作</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% if tableList %}
+            {% for key in tableList %}
+            <tr class="item">
+                <th scope="row">{{key.number}}</th>
+                <td>{{key.course_name}}</td>
+                <td>{{key.course_no}}</td>
+                <td>{{key.credit}}</td>
+                <td>{{key.course_hour}}</td>
+                <td>{{key.teacher_name}}</td>
+                <td>
+                    <button type="button" class="btn btn-success choose-class-btn"
+                        data-course-capacity="{{key.course_capacity}}" data-classid="{{key.course_no}}">取消选课</button>
+                </td>
+            </tr>
+            {% endfor %}
+            {% endif %}
+        </tbody>
+    </table>
+    <input type="hidden" name="csrf_token" id="csrf_token" value="{{csrf_token()}}">
+    <!-- 分页按钮 -->
+    <div class="page-navigation"></div>
+</div>
+{% endblock %}
+
+{% block page_scripts %}
+<script src="{{ url_for('static', filename="js/page.js") }}"></script>
+<script src="{{ url_for('static', filename="js/table.js") }}"></script>
+<script>
+    get_table_url = "/isChoosed_course";
+    cancel_course_no = ''
+
+    // 点击选课按钮
+    $('.choose-class-btn').click(function (e) {
+        var course_no = e.target.attributes[3].value
+        var course_capacity = e.target.attributes[2].value
+        cancel_course_no = course_no
+        if (course_capacity == 0) {
+            $('.modal').show().find('.modal-title').text('注意')
+            $('.modal').find('.modal-body p').text('当前课程容量为0,取消选课后再选该课程机率会降低')
+            return false
+        }
+
+        $('.modal').show().find('.modal-title').text('注意')
+        $('.modal').find('.modal-body p').text('取消选课,已录入的成绩将清0')
+    })
+
+    // 点击选课按钮方法
+    function handleChoosed(course_capacity, course_no) {
+        cancel_course_no = course_no
+        if (course_capacity == 0) {
+            $('.modal').show().find('.modal-title').text('注意')
+            $('.modal').find('.modal-body p').text('当前课程容量为0,取消选课后再选该课程机率会降低')
+            return false
+        }
+
+        $('.modal').show().find('.modal-title').text('注意')
+        $('.modal').find('.modal-body p').text('取消选课,已录入的成绩将清0')
+    }
+
+    // 取消选课
+    function cancelChoose(course_no) {
+        $.ajax({
+            type: "post",
+            url: get_table_url + "/cancelChoose",
+            data: {
+                course_no
+            },
+            headers: {
+                "X-CSRFToken": csrf_token,
+            },
+            dataType: "json",
+            async: false,
+            success: function (data) {
+                console.log(data);
+                if (data.code === 200) {
+                    isChoose = true
+                    $('.modal').show().find('.modal-title').text('信息')
+                    $('.modal').find('.modal-body p').text(data.msg)
+
+                    setTimeout(() => {
+                        url = 'http://127.0.0.1:1208' + get_table_url + '/getTable'
+                        initTable(url)
+                        $('.modal').hide()
+                    }, 3000);
+                }
+            }
+        });
+    }
+</script>
+{% endblock %}

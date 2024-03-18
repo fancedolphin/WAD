@@ -1,0 +1,54 @@
+{% extends 'base.html' %}
+
+{% block title %}个人中心{% endblock %}
+
+{% block page_content %}
+<main class="personal-info-wrap">
+    <div class="stu-info ">
+        <dl class="row ">
+            {% if result.STU_NO %}
+            <dt class="col-sm-3">姓名：</dt>
+            <dd class="col-sm-9">{{result.STU_NAME}}</dd>
+
+            <dt class="col-sm-3">性别：</dt>
+            <dd class="col-sm-9">{{result.STU_SEX}}</dd>
+
+            <dt class="col-sm-3">学号：</dt>
+            <dd class="col-sm-9">{{result.STU_NO}}</dd>
+
+            <dt class="col-sm-3 ">学院：</dt>
+            <dd class="col-sm-9">{{result.college.COLLEGE_NAME}}</dd>
+
+            <dt class="col-sm-3">专业：</dt>
+            <dd class="col-sm-9">{{result.major.MAJOR_NAME}}</dd>
+
+            <dt class="col-sm-3">年级：</dt>
+            <dd class="col-sm-9">{{result.IN_YEAR}}</dd>
+            {% else %}
+            <dt class="col-sm-3">姓名：</dt>
+            <dd class="col-sm-9">{{result.TEACHER_NAME}}</dd>
+
+            <dt class="col-sm-3">性别：</dt>
+            <dd class="col-sm-9">{{result.TEACHER_SEX}}</dd>
+
+            <dt class="col-sm-3">教师编号：</dt>
+            <dd class="col-sm-9">{{result.TEACHER_NO}}</dd>
+
+            <dt class="col-sm-3 ">学院：</dt>
+            <dd class="col-sm-9">{{result.college.COLLEGE_NAME}}</dd>
+
+            <dt class="col-sm-3 ">头衔：</dt>
+            <dd class="col-sm-9">{{result.TEACHER_TITLE}}</dd>
+
+            <dt class="col-sm-3">入院年份：</dt>
+            <dd class="col-sm-9">{{result.IN_YEAR}}</dd>
+            {% endif %}
+        </dl>
+        <button type="submit" class="btn btn-primary reviseBtn btn-block">
+            <a href="{{url_for('web.revise_info')}}">修改信息</a>
+        </button>
+
+    </div>
+
+</main>
+{% endblock %}

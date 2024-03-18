@@ -1,0 +1,159 @@
+{% extends 'base.html' %}
+
+{% block title %}课程设置{% endblock %}
+
+{% block page_styles %}
+<link rel="stylesheet" type="text/css" href="{{url_for('static',filename='css/bootstrap-select.css')}}">
+<link rel="stylesheet" type="text/css" href="{{url_for('static',filename='css/bootstrap-select.css.map')}}">
+{% endblock %}
+
+{% block page_content %}
+<div class="course-setup-wrap form-wrapper">
+    <form class="" method="post" action="/course_setup/edit_course">
+        <h1>课程设置</h1>
+        <div class="error-data">
+            暂无数据
+        </div>
+        <div class="inner">
+            <input type="hidden" name="csrf_token" id="csrf_token" value="{{csrf_token()}}">
+            <div class="mb-3 form-group">
+                <label for="courses_no" class="form-label">已开课程</label>
+                <select class=" form-control" data-width="100%" required id="courses_no" autocomplete="off"
+                    name="courses_no">
+
+                </select>
+            </div>
+            <div class="mb-3 form-group">
+                <label for="college" class="form-label">学院</label>
+                <select class=" form-control" data-width="100%" required id="college" name="college" disabled>
+
+                </select>
+            </div>
+            <div class="mb-3 form-group">
+                <label for="course_number" class="form-label">课程号</label>
+                <input type="text" class="form-control" id="course_number" name="course_number" required disabled>
+            </div>
+            <div class="mb-3 form-group">
+                <label for="course_capacity" class="form-label">课程容量</label>
+                <input type="text" class="form-control" id="course_capacity" name="course_capacity" required>
+            </div>
+            <div class="mb-3 form-group">
+                <label for="course_credit" class="form-label">学分</label>
+                <input type="text" class="form-control" id="course_credit" name="course_credit" required disabled>
+            </div>
+            <div class="mb-3 form-group">
+                <label for="course_hour" class="form-label">学时</label>
+                <input type="text" class="form-control" id="course_hour" name="course_hour" required disabled>
+            </div>
+            <button type="submit" class="btn btn-primary btn-block">修改课程容量</button>
+        </div>
+    </form>
+    <button type="submit" class="btn btn-danger btn-block delete-teacher-course"
+        onclick="handleDeleteTeacherCourse()">删除该课程</button>
+</div>
+{% endblock %}
+
+{% block page_scripts %}
+<script>
+    get_table_url = '/course_setup'
+    teacher_courses_data = []
+
+    $(function () {
+        getTeacherAllCourses()
+    })
+
+    // 删除当前课程
+    function handleDeleteTeacherCourse() {
+        var delete_course_no = $('#courses_no').val()
+
+        $.ajax({
+            type: "POST",
+            url: get_table_url + "/delete_course",
+            headers: {
+                "X-CSRFToken": csrf_token,
+            },
+            data: {
+                delete_course_no
+            },
+            dataType: "json",
+            success: function (data) {
+                console.log(data);
+                $('.modal').show().find('.modal-title').text('信息')
+                $('.modal').find('.modal-body p').text(data.msg)
+                if (data.code == 200) {
+                    getTeacherAllCourses()
+                }
+            }
+        });
+    }
+
+    // 获取所有教师课程信息
+    function getTeacherAllCourses() {
+        $.ajax({
+            type: "GET",
+            url: get_table_url + "/getTeacherAllCourses",
+            data: '',
+            dataType: "json",
+            async: false,
+            success: function (data) {
+                // console.log(data);
+                if (data) {
+                    teacher_courses_data = data
+                    renderCourseForm(0)
+                } else {
+                    $('.error-data').show()
+                    $('.inner').hide()
+                }
+
+            }
+        });
+    }
+
+    // 渲染数据
+    function renderCourseForm(index, change_no) {
+        console.log(teacher_courses_data);
+        if (teacher_courses_data.length === 0) {
+            $('.course-setup-wrap .error-data').show()
+            $('.course-setup-wrap .inner').hide()
+            return false
+        }
+        $('#courses_no').empty()
+        $.each(teacher_courses_data, function (i, item) {
+
+            $('#courses_no').append(`<option value="${item.course_no}" ${item.course_no==change_no?"selected":""}>${item
+                .course_name} </option>`)
+            if (i === index) {
+                $('#course_number').val(item.course_no)
+                $('#college').append('<option value="' + item.college_no + '">' + item
+                    .college +
+                    '</option>')
+                $('#course_capacity').val(item.course_capacity)
+                $('#course_credit').val(item.course_credit)
+                $('#course_hour').val(item.course_hour)
+            }
+
+        })
+
+    }
+
+    // 选项改变
+    $('#courses_no').change(function () {
+        course_no = $(this).val()
+
+        $.each(teacher_courses_data, function (i, item) {
+            if (item.course_no == course_no) {
+                renderCourseForm(i, course_no)
+            }
+        })
+
+    })
+
+    // 弹框
+    $('.modal-close-btn').click(function () {
+        $('.modal').hide()
+    });
+    $('.modal-confirm-btn').click(function () {
+        $('.modal').hide()
+    })
+</script>
+{% endblock %}

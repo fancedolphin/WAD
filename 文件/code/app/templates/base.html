@@ -1,0 +1,67 @@
+{% extends "bootstrap/base.html"  %}
+
+{% block title %}学生管理系统{% endblock %}
+
+{% block styles %}
+<link rel="stylesheet" type="text/css" href="{{url_for('static',filename='css/bootstrap.css')}}">
+<link rel="stylesheet" type="text/css" href="{{url_for('static',filename='css/bootstrap.css.map')}}">
+<link rel="stylesheet" type="text/css" href="{{url_for('static',filename='css/style.css')}}">
+{% block page_styles %}{% endblock %}
+{% endblock %}
+
+{% block navbar %}
+<!-- 导航 -->
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+    <a class=" navbar-brand" href="{{url_for('web.home')}}">
+        <img src="{{url_for('static',filename='images/logo.webp')}}" alt="显示管理系统" width="30" height="24"
+            class="d-inline-block align-text-top">
+        学生管理系统
+    </a>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
+        aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+    </button>
+
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+        <ul class="navbar-nav mr-auto">
+
+        </ul>
+        <button type="button" class="btn btn-danger logout">
+            <a href="/logout">退出</a>
+        </button>
+    </div>
+</nav>
+{% endblock %}
+
+{% block content %}
+<div class="wrap-mark">
+    {% block page_content %}{% endblock %}
+    <div class="modal" id="Modal" tabindex="-1">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title"></h5>
+                </div>
+                <div class="modal-body">
+                    <p></p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary modal-close-btn" data-dismiss="modal">关闭</button>
+                    <button type="button" class="btn btn-primary modal-confirm-btn">确定</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="footer">
+        @2023 | Student management system
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script src="{{ url_for('static', filename="js/jquery.min.js") }}"></script>
+<script src="{{ url_for('static', filename="js/navbar.js") }}"></script>
+<script src="{{ url_for('static', filename="js/bootstrap.bundle.min.js") }}"></script>
+<script src="{{ url_for('static', filename="js/common.js") }}"></script>
+{% block page_scripts %}{% endblock %}
+{% endblock %}

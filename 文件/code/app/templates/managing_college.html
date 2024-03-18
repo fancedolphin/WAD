@@ -1,0 +1,159 @@
+{% extends 'base.html' %}
+
+{% block title %}学院管理{% endblock %}
+
+{% block page_content %}
+<div class="managing-college-wrap form-wrapper">
+    <form class="" method="post" action="/manage_edit">
+        <h1>学院管理</h1>
+        <div class="form-error-msg">
+            {% if get_flashed_messages() %}
+            <strong>Message: </strong>
+            {% for item in get_flashed_messages() %}
+            {{ item }}
+            {% endfor %}
+            {% endif %}
+        </div>
+        <input type="hidden" name="csrf_token" id="csrf_token" value="{{csrf_token()}}">
+        <input type="hidden" name="type" id="type" value="{{type}}">
+        <div class="mb-3 form-group all-college">
+            <label for="college" class="form-label">所有学院</label>
+            <select class="form-control" data-width="100%" required id="college" name="college">
+
+            </select>
+        </div>
+        <div class="mb-3 form-group">
+            <label for="college_no" class="form-label">学院编号</label>
+            <input type="text" class="form-control" id="college_no" name="college_no" required placeholder="请输入4位学院编号"
+                minlength="4" maxlength="4">
+        </div>
+        <div class="mb-3 form-group">
+            <label for="college_name" class="form-label">学院名称</label>
+            <input type="text" class="form-control" id="college_name" name="college_name" required
+                placeholder="请输入学院名称">
+        </div>
+
+        <button type="submit" class="btn btn-primary btn-block manage-edit-btn">修改</button>
+        <button type="" class="btn btn-success btn-block manage-add-btn" onclick="handleAdd();return false">添加</button>
+        <button type="" class="btn btn-danger btn-block manage-delete-btn"
+            onclick="handleDelete();return false">删除</button>
+    </form>
+</div>
+{% endblock %}
+
+{% block page_scripts %}
+<script>
+    var colleges = []
+    var college_no = ''
+    var college_name = ''
+
+    $(function () {
+        colleges = getCollege()
+        render(colleges)
+    })
+
+    // 渲染数据
+    function render(init_data) {
+        $.each(init_data, function (i, item) {
+            $('#college').append(`<option value="${item.college_no}">${item.college_name}</option>`)
+            if (i === 0) {
+                $('#college_no').val(item.college_no)
+                $('#college_name').val(item.college_name)
+            }
+        })
+    }
+
+    $('#college_no').change(function (e) {
+        college_no = e.target.value
+    })
+    $('#college_name').change(function (e) {
+        college_name = e.target.value
+    })
+
+    // 添加
+    function handleAdd() {
+        $('.manage-edit-btn').hide()
+        $('.manage-delete-btn').hide()
+        $('.all-college').hide()
+        $('#college_no').val('')
+        $('#college_name').val('')
+
+        if (college_no == '' || college_name == '') return false
+        $.ajax({
+            type: "post",
+            url: '/manage_add',
+            data: {
+                college_no,
+                college_name,
+                type: 0
+            },
+            headers: {
+                "X-CSRFToken": csrf_token,
+            },
+            dataType: "json",
+            async: false,
+            success: function (data) {
+                console.log(data);
+                $('.modal').show().find('.modal-title').text('信息')
+                $('.modal').find('.modal-body p').text(data.msg)
+            }
+        })
+    }
+
+    // 删除
+    function handleDelete() {
+        college_no = $('#college_no').val()
+        college_name = $('#college_name').val()
+        if (college_no == '' || college_name == '') {
+            $('.modal').show().find('.modal-title').text('信息')
+            $('.modal').find('.modal-body p').text('学院编号或学院名称不能为空')
+            return false
+        }
+
+        $.ajax({
+            type: "post",
+            url: '/manage_delete',
+            data: {
+                college_no,
+                type: 0
+            },
+            headers: {
+                "X-CSRFToken": csrf_token,
+            },
+            dataType: "json",
+            async: false,
+            success: function (data) {
+                console.log(data);
+                $('.modal').show().find('.modal-title').text('信息')
+                $('.modal').find('.modal-body p').text(data.msg)
+                if (data.code == 200) {
+                    window.location.reload()
+                }
+                setTimeout(() => {
+                    $('.modal').hide()
+                }, 5000);
+            }
+        })
+    }
+
+    // 选项改变
+    $('#college').change(function () {
+        console.log(colleges);
+        var college_ = $("#college").val();
+        $.each(colleges, function (i, item) {
+            if (item.college_no == college_) {
+                $('#college_no').val(item.college_no)
+                $('#college_name').val(item.college_name)
+            }
+        })
+    })
+
+    // 弹框
+    $('.modal-close-btn').click(function () {
+        $('.modal').hide()
+    });
+    $('.modal-confirm-btn').click(function () {
+        $('.modal').hide()
+    })
+</script>
+{% endblock %}
