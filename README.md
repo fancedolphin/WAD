@@ -47,3 +47,4 @@ Potential future improvements or enhancements to the web application could inclu
 6. Performance optimization: Continuously monitoring and optimizing the performance of the web application to handle increased traffic and improve response times can enhance user satisfaction.
 
 Overall, the success of the implementation depends on the achievement of project objectives, the usability and performance of the web application, and the satisfaction of end users. Regular feedback, testing, and continuous improvement are key to ensuring the successful operation of the web application and meeting the evolving needs of users.
+![image](https://github.com/fancedolphin/flask/assets/142928776/f454a005-214d-4018-983b-f6e7df1b280f)
