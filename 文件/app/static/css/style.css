@@ -1,0 +1,217 @@
+@import url(./base.css);
+
+/* base  */
+body {
+    overflow: hidden;
+}
+
+.btn a {
+    color: #fff;
+    width: 100%;
+    display: block;
+    height: 100%;
+}
+
+.navbar-expand-lg .navbar-collapse {
+    justify-content: space-between;
+}
+
+.footer {
+    padding: 10px 0;
+    position: fixed;
+    bottom: 0;
+    text-align: center;
+    width: 100%;
+    color: #333;
+}
+
+.wrap-mark {
+    width: 100%;
+    height: 100vh;
+    padding: 0;
+}
+
+#courses-modal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: 1050;
+    display: none;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+    outline: 0;
+}
+
+/* home */
+.home-wrap {
+    width: 100%;
+    height: 100%;
+    padding-top: 8%;
+}
+
+.home-wrap main {
+    width: fit-content;
+    padding: 100px;
+    background-color: #ffffffeb;
+    border-radius: 50px;
+    box-shadow: 5px 5px 50px #33333375;
+}
+
+.home-wrap #username {
+    margin: 20px 0;
+}
+
+/* login */
+#box {
+    width: 100%;
+    height: 100vh;
+}
+
+.login-wrap {
+    width: 100%;
+    height: 100%;
+    position: fixed;
+    top: 80px;
+}
+
+.login-wrap h1 {
+    text-align: center;
+    padding: 70px;
+}
+
+.login-wrap form {
+    width: 400px;
+    padding: 30px;
+    position: relative;
+    top: 0px;
+    left: 50%;
+    margin-left: -200px;
+    background-color: #e3e3e352;
+    border-radius: 20px;
+}
+
+.form-error-msg {
+    color: red;
+    padding: 5px 0;
+}
+
+/* personal_information */
+.personal-info-wrap {
+    width: 100%;
+    overflow: hidden;
+    padding: 50px;
+}
+
+.personal-info-wrap .stu-info {
+    width: 600px;
+    margin: auto;
+    font-size: 24px;
+}
+
+.personal-info-wrap .stu-info dt,
+.personal-info-wrap .stu-info dd {
+    line-height: 50px;
+}
+
+.personal-info-wrap .stu-info .reviseBtn {
+    margin-top: 20px;
+}
+
+/* revise_info */
+/* add-user */
+/* edit-user */
+/* edit-password */
+.form-wrapper {
+    position: relative;
+    height: 620px;
+    overflow: auto;
+}
+
+.form-wrapper form {
+    width: 400px;
+    position: absolute;
+    top: 50px;
+    left: 50%;
+    margin-left: -200px;
+}
+
+.form-wrapper h1 {
+    text-align: center;
+    padding-bottom: 20px;
+    color: #607D8B;
+}
+
+/* score-query */
+/* choose-course */
+/* isChoosed-course */
+/* add-score */
+/* managing-user */
+.table-wrapper {
+    width: 80%;
+    margin: auto;
+    padding: 30px;
+    height: 620px;
+    overflow: auto;
+}
+
+.table-wrapper .head {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 10px 0;
+    position: relative;
+}
+
+.table-wrapper .head .title {
+    font-size: 30px;
+    color: #3333338a;
+}
+
+.table-wrapper table tbody .none {
+    text-align: center;
+    width: 100%;
+    line-height: 80px;
+    color: #8c8787;
+    font-size: 20px;
+}
+
+.table-wrapper .pagination {
+    justify-content: center;
+}
+
+.table-wrapper .pagination li {
+    cursor: pointer;
+}
+
+.table-wrapper .select-type {
+    width: 200px;
+    position: absolute;
+    left: 150px;
+}
+
+/* add-score-wrap */
+.add-score-wrap .add-score-input {
+    width: 100px;
+}
+
+/* course-setup */
+.course-setup-wrap {
+    position: relative;
+}
+
+.course-setup-wrap .error-data {
+    padding: 100px 30px;
+    text-align: center;
+    font-size: 20px;
+    color: #706a6a;
+    display: none;
+}
+
+.course-setup-wrap .delete-teacher-course {
+    position: absolute;
+    top: 680px;
+    width: 400px;
+    left: 50%;
+    margin-left: -200px;
+}

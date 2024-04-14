@@ -1,0 +1,25 @@
+{% extends 'base.html' %}
+
+{% block title %}Home{% endblock %}
+
+{% block page_content %}
+<div class="home-wrap">
+  <main class="cont mx-auto">
+    <h3 id="username">
+      Hello, {{user}}!
+    </h3>
+    <blockquote class="blockquote">
+      <p class="mb-0 display-3 text-info">Welcome to the Learning management system</p>
+{#      <footer class="blockquote-footer">#}
+{#        Welcome to <cite title="Source Title">the Student management system</cite>#}
+{#      </footer>#}
+    </blockquote>
+  </main>
+</div>
+{% endblock %}
+
+{% block page_scripts %}
+<script>
+
+</script>
+{% endblock %}

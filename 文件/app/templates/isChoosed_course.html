@@ -1,0 +1,119 @@
+{% extends 'base.html' %}
+
+
+{% block title %}Selected Courses{% endblock %}
+
+{% block page_content %}
+<div class="choose-class-wrap table-wrapper">
+    <div class="head">
+        <span class="title">Selected Courses</span>
+        <form class="form-inline my-2 my-lg-0">
+            <input class="form-control mr-sm-2 search-input" type="search" placeholder="Enter Course Number" aria-label="Search">
+            <button class="btn btn-outline-success my-2 my-sm-0 search-btn">Search</button>
+        </form>
+    </div>
+
+    <table class="table table-hover">
+        <thead>
+            <tr>
+                <th scope="col">#</th>
+                <th scope="col">Course Name</th>
+                <th scope="col">Course Number</th>
+                <th scope="col">Credits</th>
+                <th scope="col">Hours</th>
+                <th scope="col">Instructor</th>
+                <th scope="col">Action</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% if tableList %}
+            {% for key in tableList %}
+            <tr class="item">
+                <th scope="row">{{key.number}}</th>
+                <td>{{key.course_name}}</td>
+                <td>{{key.course_no}}</td>
+                <td>{{key.credit}}</td>
+                <td>{{key.course_hour}}</td>
+                <td>{{key.teacher_name}}</td>
+                <td>
+                    <button type="button" class="btn btn-success choose-class-btn"
+                        data-course-capacity="{{key.course_capacity}}" data-classid="{{key.course_no}}">Cancel Course Selection</button>
+                </td>
+            </tr>
+            {% endfor %}
+            {% endif %}
+        </tbody>
+    </table>
+    <input type="hidden" name="csrf_token" id="csrf_token" value="{{csrf_token()}}">
+    <!-- Pagination Buttons -->
+    <div class="page-navigation"></div>
+</div>
+{% endblock %}
+
+
+{% block page_scripts %}
+<script src="{{ url_for('static', filename="js/page.js") }}"></script>
+<script src="{{ url_for('static', filename="js/table.js") }}"></script>
+<script>
+    get_table_url = "/isChoosed_course";
+    cancel_course_no = ''
+
+    // Click the 'Choose Class' button
+$('.choose-class-btn').click(function (e) {
+    var course_no = e.target.attributes[3].value
+    var course_capacity = e.target.attributes[2].value
+    cancel_course_no = course_no
+    if (course_capacity == 0) {
+        $('.modal').show().find('.modal-title').text('Attention')
+        $('.modal').find('.modal-body p').text('Current course capacity is 0, chances of re-selecting this course will decrease after cancellation')
+        return false
+    }
+
+    $('.modal').show().find('.modal-title').text('Attention')
+    $('.modal').find('.modal-body p').text('Cancelling the course selection will reset any recorded grades to 0')
+})
+
+// Method for clicking the 'Choose Class' button
+function handleChoosed(course_capacity, course_no) {
+    cancel_course_no = course_no
+    if (course_capacity == 0) {
+        $('.modal').show().find('.modal-title').text('Attention')
+        $('.modal').find('.modal-body p').text('Current course capacity is 0, chances of re-selecting this course will decrease after cancellation')
+        return false
+    }
+
+    $('.modal').show().find('.modal-title').text('Attention')
+    $('.modal').find('.modal-body p').text('Cancelling the course selection will reset any recorded grades to 0')
+}
+
+// Cancel course selection
+function cancelChoose(course_no) {
+    $.ajax({
+        type: "post",
+        url: get_table_url + "/cancelChoose",
+        data: {
+            course_no
+        },
+        headers: {
+            "X-CSRFToken": csrf_token,
+        },
+        dataType: "json",
+        async: false,
+        success: function (data) {
+            console.log(data);
+            if (data.code === 200) {
+                isChoose = true
+                $('.modal').show().find('.modal-title').text('Information')
+                $('.modal').find('.modal-body p').text(data.msg)
+
+                setTimeout(() => {
+                    url = 'http://127.0.0.1:1208' + get_table_url + '/getTable'
+                    initTable(url)
+                    $('.modal').hide()
+                }, 3000);
+            }
+        }
+    });
+}
+</script>
+{% endblock %}

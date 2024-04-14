@@ -1,0 +1,54 @@
+{% extends 'base.html' %}
+
+{% block title %}Personal Center{% endblock %}
+
+{% block page_content %}
+<main class="personal-info-wrap">
+    <div class="stu-info">
+        <dl class="row">
+            {% if result.STU_NO %}
+            <dt class="col-sm-3">Name:</dt>
+            <dd class="col-sm-9">{{result.STU_NAME}}</dd>
+
+            <dt class="col-sm-3">Gender:</dt>
+            <dd class="col-sm-9">{{result.STU_SEX}}</dd>
+
+            <dt class="col-sm-3">Student ID:</dt>
+            <dd class="col-sm-9">{{result.STU_NO}}</dd>
+
+            <dt class="col-sm-3">College:</dt>
+            <dd class="col-sm-9">{{result.college.COLLEGE_NAME}}</dd>
+
+            <dt class="col-sm-3">Major:</dt>
+            <dd class="col-sm-9">{{result.major.MAJOR_NAME}}</dd>
+
+            <dt class="col-sm-3">Grade:</dt>
+            <dd class="col-sm-9">{{result.IN_YEAR}}</dd>
+            {% else %}
+            <dt class="col-sm-3">Name:</dt>
+            <dd class="col-sm-9">{{result.TEACHER_NAME}}</dd>
+
+            <dt class="col-sm-3">Gender:</dt>
+            <dd class="col-sm-9">{{result.TEACHER_SEX}}</dd>
+
+            <dt class="col-sm-3">Teacher ID:</dt>
+            <dd class="col-sm-9">{{result.TEACHER_NO}}</dd>
+
+            <dt class="col-sm-3">College:</dt>
+            <dd class="col-sm-9">{{result.college.COLLEGE_NAME}}</dd>
+
+            <dt class="col-sm-3">Title:</dt>
+            <dd class="col-sm-9">{{result.TEACHER_TITLE}}</dd>
+
+            <dt class="col-sm-3">Year of Admission:</dt>
+            <dd class="col-sm-9">{{result.IN_YEAR}}</dd>
+            {% endif %}
+        </dl>
+        <button type="submit" class="btn btn-primary reviseBtn btn-block">
+            <a href="{{url_for('web.revise_info')}}">Edit Information</a>
+        </button>
+
+    </div>
+
+</main>
+{% endblock %}

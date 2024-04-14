@@ -1,0 +1,59 @@
+{% extends 'base.html' %}
+
+{% block title %}Score Inquiry{% endblock %}
+
+{% block page_content %}
+<div class="score-query-wrap table-wrapper">
+    <div class="head">
+        <span class="title">Score Inquiry</span>
+        <form class="form-inline my-2 my-lg-0">
+            <input class="form-control mr-sm-2 search-input" type="search" placeholder="Enter Course Number" aria-label="Search">
+            <button class="btn btn-outline-success my-2 my-sm-0 search-btn">Search</button>
+        </form>
+    </div>
+
+    <table class="table table-hover">
+        <thead>
+            <tr>
+                <th scope="col">#</th>
+                <th scope="col">Course Name</th>
+                <th scope="col">Course Number</th>
+                <th scope="col">Credits</th>
+                <th scope="col">Hours</th>
+                <th scope="col">Instructor</th>
+                <th scope="col">Grade</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% if tableList %}
+            {% for key in tableList %}
+            <tr class="item">
+                <th scope="row">{{key.number}}</th>
+                <td>{{key.course_name}}</td>
+                <td>{{key.course_no}}</td>
+                <td>{{key.credit}}</td>
+                <td>{{key.course_hour}}</td>
+                <td>{{key.teacher_name}}</td>
+                {% if key.grade  %}
+                <td>{{key.grade}}</td>
+                {% else %}
+                <td>N/A</td>
+                {% endif %}
+            </tr>
+            {% endfor %}
+            {% endif %}
+        </tbody>
+    </table>
+    <!-- Pagination Buttons -->
+    <div class="page-navigation"></div>
+
+</div>
+{% endblock %}
+
+{% block page_scripts %}
+<script src="{{ url_for('static', filename='js/page.js') }}"></script>
+<script src="{{ url_for('static', filename='js/table.js') }}"></script>
+<script>
+    get_table_url = '/score_query'
+</script>
+{% endblock %}

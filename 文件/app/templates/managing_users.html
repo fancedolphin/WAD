@@ -1,0 +1,349 @@
+{% extends 'base.html' %}
+
+{% block title %}User Management{% endblock %}
+
+{% block page_content %}
+<div class="managing-users-wrap table-wrapper">
+    <div class="head">
+        <span class="title">User Management</span>
+        <select class="form-control select-type" required id="user_type_select">
+            <option value="" disabled>--Select User Type--</option>
+            <option value="student" selected>Student</option>
+            <option value="teacher">Teacher</option>
+        </select>
+        <div style="display: flex;">
+            <form class="form-inline my-2 my-lg-0">
+                <input class="form-control mr-sm-2 search-input" type="search" placeholder="Enter Student ID or Number"
+                    aria-label="Search">
+                <button class="btn btn-outline-success my-2 my-sm-0" onclick="return false;">Search</button>
+            </form>
+            <button class="btn btn-primary ml-2 my-sm-0" onclick="addUser()">Add User</button>
+        </div>
+    </div>
+
+    <table class="table table-hover managing-user-table" id="formTable">
+        <thead>
+            <tr>
+                <th scope="col">#</th>
+                <th scope="col">User ID/Number</th>
+                <th scope="col">User Name</th>
+                <th scope="col">User Gender</th>
+                <th scope="col">College</th>
+                <th scope="col">Major/Title</th>
+                <th scope="col">Grade/Year of Admission</th>
+                <th scope="col">Courses</th>
+                <th scope="col">Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+
+        </tbody>
+    </table>
+
+    <div id="courses-modal" tabindex="-1">
+        <div class="modal-dialog  modal-dialog-scrollable">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">All Information</h5>
+                </div>
+                <div class="modal-body">
+                    <table class="table table-hover" id="formTable">
+                        <thead>
+                            <tr>
+                                <th scope="col">#</th>
+                                <th scope="col">Course Number</th>
+                                <th scope="col">Course Name</th>
+                                <th scope="col">Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+
+                        </tbody>
+                    </table>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary modal-close-btn" data-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-primary modal-confirm-btn">Confirm</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <input type="hidden" name="csrf_token" id="csrf_token" value="{{csrf_token()}}">
+</div>
+{% endblock %}
+
+
+{% block page_scripts %}
+<script>
+    get_table_url = '/managing_users'
+    var stu_teacher_courses = []
+    var user_no = ''
+    var isDelete = false
+    var user_select_type = 'student'
+    var is_teacher = false
+    var get_user_url = '/getAllStudents'
+    var cancel_course_no = ''
+    var stu_btn = ''
+    var teacher_btn = ''
+
+    $(function () {
+        getAllUser()
+    })
+
+    // 转换用户类型
+    $('.select-type').change(function () {
+        user_select_type = $(this).val()
+        console.log(user_select_type);
+        if (user_select_type == 'student') {
+            is_teacher = false
+            get_user_url = '/getAllStudents'
+        } else {
+            is_teacher = true
+            get_user_url = '/getAllTeachers'
+        }
+        getAllUser()
+    })
+
+// Get all user information
+function getAllUser() {
+    $('.managing-user-table tbody').empty()
+    $.ajax({
+        type: "get",
+        url: get_table_url + get_user_url,
+        data: '',
+        dataType: "json",
+        async: false,
+        success: function (data) {
+            console.log(data);
+            $.each(data, function (i, item) {
+                stu_teacher_courses.push({
+                    [item.user_no]: item.courses
+                })
+
+                $('.managing-user-table tbody').append(`
+                <tr>
+                    <th scope="row">${item.number}</th>
+                    <td>${item.user_no}</td>
+                    <td>${item.user_name}</td>
+                    <td>${item.user_sex}</td>
+                    <td>${item.college}</td>
+                    <td>${is_teacher?item.title:item.major}</td>
+                    <td>${item.in_year}</td>
+                    <td>
+                        <button class="btn btn-outline-warning my-2 my-sm-0"
+                           onclick="lookAllCourses(${item.user_no})">View</button>
+                    </td>
+                    <td>
+                        <button class="btn btn-outline-primary my-2 my-sm-0"
+                            onclick="editStudentInfo(${item.user_no})">Edit</button>
+                        <button class="btn btn-outline-danger my-2 my-sm-0"
+                            onclick="deleteUser(${item.user_no})">Delete</button>
+                    </td>
+                </tr>`)
+
+            })
+
+        }
+    });
+}
+
+// Render the modal
+function showCourseModal(user) {
+    $('#courses-modal').find('.modal-body tbody').empty()
+    var course = []
+
+    $.each(stu_teacher_courses, function (i, courses) {
+        course = courses[user]
+        if (course) {
+            return false
+        }
+    })
+    if (course.length === 0) {
+        $('#courses-modal').find('.modal-body tbody').append(`<tr class='none'>
+            <td colspan=4>No courses available
+            <td>
+        </tr>`)
+        return false
+    }
+    $.each(course, function (i, item) {
+        cancel_course_no = item.course_no
+        user_no = user
+        stu_btn = `<button class="btn btn-outline-primary my-2 my-sm-0"
+            onclick="cancelSelectCourse(${cancel_course_no},${user_no})">Cancel Enrollment</button>`
+        teacher_btn = `<button class="btn btn-outline-primary my-2 my-sm-0"
+            onclick="cancelTeacherCourse(${cancel_course_no},${user_no})">Cancel Course</button>`
+        $('#courses-modal').find('.modal-body tbody').append(`
+        <tr>
+            <th scope="row">${i+1}</th>
+            <td>${item.course_no}</td>
+            <td>${item.course_name}</td>
+            <td>${is_teacher?teacher_btn:stu_btn}</td>
+        </tr>
+    `)
+    })
+
+}
+
+
+    // 取消教师课程
+    function cancelTeacherCourse(course_no, teacher_no) {
+        $.ajax({
+            type: "post",
+            url: get_table_url + "/cancel_teacher_course",
+            data: {
+                course_no,
+                teacher_no
+            },
+            headers: {
+                "X-CSRFToken": csrf_token,
+            },
+            dataType: "json",
+            async: false,
+            success: function (data) {
+                console.log(data);
+                if (data.code === 200) {
+
+                    var temp_arr = data.courses
+                    teacher_no = parseInt(teacher_no)
+                    stu_teacher_courses.forEach((item, i) => {
+                        if (item[teacher_no]) {
+                            item[teacher_no] = temp_arr
+                            return false
+                        }
+                    })
+                    showCourseModal(teacher_no)
+
+                } else if (data.code === 400) {
+                    $('#courses-modal').show()
+                    $('#courses-modal').find('.modal-body tbody').html(`<tr class='none'>
+            <td colspan=4>${data.msg}
+            <td>
+        </tr>`)
+                }
+            }
+        });
+    }
+
+    // 查看所有课程
+    function lookAllCourses(stu_no) {
+        $('#courses-modal').show()
+        showCourseModal(stu_no)
+    }
+
+    // 跳转修改用户信息页
+    function editStudentInfo(user_no) {
+        window.location.href = '/edit_user?user_type=' + user_select_type + '&user_no=' + user_no
+    }
+
+    // 取消学生选课
+    function cancelSelectCourse(course_no, stu_no) {
+
+        $.ajax({
+            type: "post",
+            url: get_table_url + "/cancelChoose",
+            data: {
+                course_no,
+                stu_no
+            },
+            headers: {
+                "X-CSRFToken": csrf_token,
+            },
+            dataType: "json",
+            async: false,
+            success: function (data) {
+                console.log(data);
+                if (data.code === 200) {
+
+                    var temp_arr = data.courses
+                    stu_no = parseInt(stu_no)
+                    stu_teacher_courses.forEach((item, i) => {
+                        if (item[stu_no]) {
+                            item[stu_no] = temp_arr
+                            return false
+                        }
+                    })
+
+                    showCourseModal(stu_no)
+
+                } else if (data.code === 400) {
+                    $('#courses-modal').show()
+                    $('#courses-modal').find('.modal-body tbody').html(`<tr class='none'>
+                        <td colspan=4>${data.msg}
+                        <td>
+                    </tr>`)
+                }
+            }
+        });
+
+    }
+
+    // 点击删除用户
+    function deleteUser(user) {
+        user_no = user
+        isDelete = true
+        $('.modal').show().find('.modal-title').html('Message')
+        $('.modal').find('.modal-body').html('Are you sure you want to delete this user?')
+    }
+
+    // 删除用户
+    function dalate(user_no) {
+        isDelete = false
+        $.ajax({
+            type: "post",
+            url: get_table_url + "/deleteUser",
+            data: {
+                user_type: user_select_type,
+                user_no
+            },
+            headers: {
+                "X-CSRFToken": csrf_token,
+            },
+            dataType: "json",
+            async: false,
+            success: function (data) {
+                console.log(data);
+                $('.modal').show().find('.modal-title').html('messqge')
+                $('.modal').find('.modal-body').html(data.msg)
+                if (data.code == 200) {
+
+                    stu_teacher_courses = []
+
+                    setTimeout(() => {
+                        getAllUser()
+                        $('.modal').hide()
+                    }, 3000);
+                }
+            }
+        })
+    }
+
+    // 跳转添加用户页
+    function addUser() {
+        window.location.href = '/add_user?is_add_user=true&user_type=' + user_select_type
+    }
+
+    // 模糊搜索
+    $('.search-input').change(function (e) {
+        var search = e.target.value
+        if (search.trim() == '') {
+            $(".managing-user-table tbody tr").show()
+        } else {
+            $(".managing-user-table tbody tr").hide()
+            $(".managing-user-table tbody tr td").filter(":contains(" + search.trim() +
+                    ")").parents('.managing-user-table tr')
+                .show()
+        }
+    })
+
+    // 弹框
+    $('.modal-close-btn').click(function () {
+        $('#courses-modal').hide()
+        $('.modal').hide()
+    })
+    $('.modal-confirm-btn').click(function () {
+        $('#courses-modal').hide()
+        $('.modal').hide()
+        if (isDelete) dalate(user_no)
+    })
+</script>
+{% endblock %}
