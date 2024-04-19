@@ -3,8 +3,6 @@
 {% block title %}Edit Information{% endblock %}
 
 {% block page_styles %}
-<link rel="stylesheet" type="text/css" href="{{url_for('static',filename='css/bootstrap-select.css')}}">
-<link rel="stylesheet" type="text/css" href="{{url_for('static',filename='css/bootstrap-select.css.map')}}">
 {% endblock %}
 
 {% block page_content %}
@@ -24,11 +22,13 @@
                 <option value="Male">Male</option>
             </select>
         </div>
-        <div class="mb-3 form-group">
-            <label for="college" class="form-label">College</label>
+<div class="mb-3 form-group">
+        <label for="college" class="form-label">College</label>
+        <div class="select-container">
             <select class="selectpicker form-control" data-width="100%" required id="college" name="college">
             </select>
         </div>
+    </div>
         {% if role %}
         <div class="mb-3 form-group">
             <label for="major" class="form-label">Major</label>
@@ -119,11 +119,9 @@
 
 
     // 选项改变
-    $('#college').change(function () {
-        $("#major").empty()
-        $("#major").find("option:not(:first)").remove();
+$('#college').on('changed.bs.select', function () {
+        $("#major").empty();
         $("#major").selectpicker('refresh');
-
         var college_ = $("#college").val();
         initMajor(college_);
     })

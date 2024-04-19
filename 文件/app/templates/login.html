@@ -6,17 +6,15 @@
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Login</title>
-  <link rel="stylesheet" type="text/css" href="{{url_for('static',filename='css/bootstrap.css')}}">
   <link rel="stylesheet" type="text/css" href="{{url_for('static',filename='css/style.css')}}">
-  <script src="{{ url_for('static', filename="js/jquery.min.js") }}"></script>
+  <script src="{{ url_for('static', filename='js/jquery.min.js') }}"></script>
 </head>
 
 <body>
   <div class="wrapper">
-    <div id="box"></div>
     <div class="login-wrap">
       <h1>Learning Management System</h1>
-      <form class="" method="post" action="/login">
+      <form method="post" action="/login">
         <input type="hidden" name="csrf_token" id="csrf_token" value="{{csrf_token()}}">
         <div class="form-error-msg">
           {% if get_flashed_messages() %}
@@ -33,21 +31,23 @@
           {% endfor %}
           {% endif %}
         </div>
-        <div class="mb-3 form-group">
-          <label for="user_no" class="form-label">User Number</label>
-          <input type="text" class="form-control" id="user_no" name="user_no" placeholder="Enter your number">
+        <div class="form-group">
+          <label for="user_no">User Number</label>
+          <input type="text" class="input" id="user_no" name="user_no" placeholder="Enter your number">
         </div>
-        <div class="mb-3 form-group">
-          <label for="password" class="form-label">Password</label>
-          <input type="password" class="form-control" id="password" name="password" placeholder="Enter your login password">
+        <div class="form-group">
+          <label for="password">Password</label>
+          <input type="password" class="input" id="password" name="password" placeholder="Enter your login password">
         </div>
-        <button type="submit" class="btn btn-primary btn-block">Login</button>
+        <button type="submit" class="button">Login</button>
       </form>
     </div>
   </div>
 
-  <script src='{{url_for('static',filename='js/particles.js')}}' type="text/javascript"></script>
-  <script src='{{url_for('static',filename='js/background.js')}}' type="text/javascript"></script>
+  <script src="{{ url_for('static', filename='js/particles.js') }}" type="text/javascript"></script>
+  <script src="{{ url_for('static', filename='js/background.js') }}" type="text/javascript"></script>
 </body>
 
 </html>
+
+

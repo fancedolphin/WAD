@@ -8,15 +8,14 @@ student_navbar = `
     <li class="nav-item">
         <a class="nav-link" href="/score_query">Grade</a>
     </li>
-    <li class="nav-item dropdown">
-        <a class="nav-link dropdown-toggle" href="#" role="button" data-toggle="dropdown" aria-expanded="false">
-            Select course
-        </a>
-        <div class="dropdown-menu">
-            <a class="dropdown-item" href="/isChoosed_course">Choosed</a>
-            <a class="dropdown-item" href="/choose_course">Choose</a>
-        </div>
+        <li class="nav-item">
+        <a class="nav-link" href="/isChoosed_course">Chose Course</a>
     </li>
+       </li>
+        <li class="nav-item">
+        <a class="nav-link" href="/choose_course">Choose Course</a>
+    </li>
+     
     `
 teacher_navbar = `
     <li class="nav-item active">
@@ -45,16 +44,16 @@ manager_navbar = `
     <li class="nav-item">
         <a class="nav-link" href="/edit_password">Modify password</a>
     </li>
-    <li class="nav-item dropdown">
-        <a class="nav-link dropdown-toggle" href="#" role="button" data-toggle="dropdown" aria-expanded="false">
-            More
-        </a>
-        <div class="dropdown-menu">
-            <a class="dropdown-item" href="/managing_college">College</a>
-            <a class="dropdown-item" href="/managing_major">Major</a>
-            <a class="dropdown-item" href="/managing_course">Course</a>
-        </div>
+        <li class="nav-item">
+        <a class="nav-link" href="/managing_college">College</a>
     </li>
+        <li class="nav-item">
+        <a class="nav-link" href="/managing_major">Major</a>
+    </li>
+        <li class="nav-item">
+        <a class="nav-link" href="/managing_course">Course</a>
+    </li>
+
 `
 
 // 获取路由参数
