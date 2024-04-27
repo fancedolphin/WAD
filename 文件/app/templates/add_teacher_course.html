@@ -3,8 +3,7 @@
 {% block title %}Add Course{% endblock %}
 
 {% block page_styles %}
-<link rel="stylesheet" type="text/css" href="{{url_for('static',filename='css/bootstrap-select.css')}}">
-<link rel="stylesheet" type="text/css" href="{{url_for('static',filename='css/bootstrap-select.css.map')}}">
+<link rel="stylesheet" type="text/css" href="{{url_for('static',filename='css/custom-style.css')}}">
 {% endblock %}
 
 {% block page_content %}
@@ -14,19 +13,19 @@
         <input type="hidden" name="csrf_token" id="csrf_token" value="{{csrf_token()}}">
         <div class="mb-3 form-group">
             <label for="college" class="form-label">College</label>
-            <select class="selectpicker form-control" data-width="100%" required id="college" name="college">
+            <select class="form-control" id="college" name="college">
             </select>
         </div>
         <div class="mb-3 form-group">
             <label for="courses_no" class="form-label">All Courses</label>
-            <select class="selectpicker form-control" data-width="100%" required id="courses_no" name="courses_no">
+            <select class="form-control" id="courses_no" name="courses_no">
             </select>
         </div>
         <div class="mb-3 form-group">
             <label for="course_capacity" class="form-label">Course Capacity</label>
             <input type="text" class="form-control" id="course_capacity" name="course_capacity" required>
         </div>
-        <button type="submit" class="btn btn-primary btn-block">Add</button>
+        <button type="submit" class="btn primary-btn">Add</button>
         <div class="form-error-msg">
             {% if get_flashed_messages() %}
             <strong>Message: </strong>
@@ -36,30 +35,9 @@
             {% endif %}
         </div>
     </form>
-
 </div>
 {% endblock %}
 
 {% block page_scripts %}
-<script src="{{ url_for('static', filename="js/bootstrap-select.js") }}"></script>
-<script>
-    $.fn.selectpicker.Constructor.BootstrapVersion = '4';
-
-    $(function () {
-        college = getCollege()
-        courses = getAllCourses()
-        initCollege()
-        initCourses()
-    })
-
-    // 选项改变
-    $('#college').change(function () {
-        $('#courses_no').empty()
-        $('#courses_no').find("option:not(:first)").remove();
-        $('#courses_no').selectpicker('refresh');
-
-        var college_ = $('#college').val()
-        initCourses(college_)
-    })
-</script>
+<script src="{{ url_for('static', filename='js/custom-script.js') }}"></script>
 {% endblock %}

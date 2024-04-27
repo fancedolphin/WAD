@@ -106,24 +106,5 @@
 {% endblock %}
 
 {% block page_scripts %}
-<script src="{{ url_for('static', filename="js/bootstrap-select.js") }}"></script>
-<script>
-    $.fn.selectpicker.Constructor.BootstrapVersion = '4';
-
-    $(function () {
-        college = getCollege()
-        major = getMajor()
-        initCollege()
-        initMajor()
-    })
-
-
-    // 选项改变
-$('#college').on('changed.bs.select', function () {
-        $("#major").empty();
-        $("#major").selectpicker('refresh');
-        var college_ = $("#college").val();
-        initMajor(college_);
-    })
-</script>
+<script src="{{ url_for('static', filename='js/custom-script.js') }}"></script>
 {% endblock %}

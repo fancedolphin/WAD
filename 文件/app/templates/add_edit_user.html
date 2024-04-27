@@ -3,8 +3,7 @@
 {% block title %}Modify User{% endblock %}
 
 {% block page_styles %}
-<link rel="stylesheet" type="text/css" href="{{url_for('static',filename='css/bootstrap-select.css')}}">
-<link rel="stylesheet" type="text/css" href="{{url_for('static',filename='css/bootstrap-select.css.map')}}">
+<link rel="stylesheet" type="text/css" href="{{url_for('static',filename='css/custom-style.css')}}">
 {% endblock %}
 
 {% block page_content %}
@@ -104,33 +103,31 @@
 {% endblock %}
 
 {% block page_scripts %}
-<script src="{{ url_for('static', filename='js/bootstrap-select.js') }}"></script>
+<script src="{{ url_for('static', filename='js/custom-script.js') }}"></script>
 <script>
-    $.fn.selectpicker.Constructor.BootstrapVersion = '4';
-    var current_user_type = getUrlOption().user_type
-    var current_user_no = getUrlOption().user_no
-    var is_add_user = getUrlOption().is_add_user
+  var current_user_type = getUrlOption().user_type;
+    var current_user_no = getUrlOption().user_no;
+    var is_add_user = getUrlOption().is_add_user;
+
     if (is_add_user === true) {
         if (current_user_type === 'student') {
-            $('.head-title-text').text('Student')
+            $('.head-title-text').text('Student');
         } else {
-            $('.head-title-text').text('Teacher')
+            $('.head-title-text').text('Teacher');
         }
     } else {
         if (current_user_type === 'student') {
-            $('.head-title-text').text('Student')
+            $('.head-title-text').text('Student');
         } else if (current_user_type === 'teacher') {
-            $('.head-title-text').text('Teacher')
+            $('.head-title-text').text('Teacher');
         }
     }
 
     $(function () {
-        college = getCollege()
-        major = getMajor()
-        initCollege()
-        initMajor()
-        if (!is_add_user) get_current_user_info()
-    })
+        if (!is_add_user) {
+            get_current_user_info();
+        }
+    });
 
     // 获取当前用户信息
     function get_current_user_info() {
@@ -148,46 +145,30 @@
             async: false,
             success: function (data) {
                 console.log(data);
-
                 if (data.code == 200) {
-                    $('#user_no').val(data.data[0].user_no)
-                    $('#name').val(data.data[0].user_name)
-                    $('#name').val(data.data[0].user_name)
-                    $('#sex option').each(function (i, item) {
-                        if (item.value == data.data[0].user_sex) {
-                            $(this).attr('selected', true)
-                        }
-                    })
-                    $('#in_year option').each(function (i, item) {
-                        if (item.value == data.data[0].in_year) {
-                            $(this).attr('selected', true)
-                        }
-                    })
-                    $('#teacher_title option').each(function (i, item) {
-                        if (item.value == data.data[0].teacher_title) {
-                            $(this).attr('selected', true)
-                        }
-                    })
-                    $("#college").empty()
-                    $("#college").find("option:not(:first)").remove();
-                    $("#major").empty()
-                    $("#major").find("option:not(:first)").remove();
-                    initCollege(data.data[0].college_no)
-                    initMajor(data.data[0].college_no, data.data[0].major_no)
+                    $('#user_no').val(data.data[0].user_no);
+                    $('#name').val(data.data[0].user_name);
+                    $('#sex').val(data.data[0].user_sex);
+                    $('#in_year').val(data.data[0].in_year);
+                    $('#teacher_title').val(data.data[0].teacher_title);
 
+                    $("#college").empty();
+                    $("#college").append(new Option("Please select", ""));
+                    // populate colleges
+                    $("#major").empty();
+                    $("#major").append(new Option("Please select", ""));
+                    // populate majors based on selected college
                 }
             }
-        })
+        });
     }
 
-    // 选项改变
+    // Handle change event for college select
     $('#college').change(function () {
-        $("#major").empty()
-        $("#major").find("option:not(:first)").remove();
-        $("#major").selectpicker('refresh');
-
-        var college_ = $("#college").val();
-        initMajor(college_);
-    })
+        var college_id = $(this).val();
+        $("#major").empty();
+        $("#major").append(new Option("Please select", ""));
+        // Populate majors based on college_id
+    });
 </script>
 {% endblock %}
