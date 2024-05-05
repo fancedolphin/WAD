@@ -9,7 +9,7 @@
 <div class="revise-info-wrap form-wrapper">
     <form class="" method="post" action="/revise_info/revise_detail_info">
         <h1>Edit Information</h1>
-        <input type="hidden" name="csrf_token" id="csrf_token" value="{{csrf_token()}}">
+        
         <div class="mb-3 form-group">
             <label for="name" class="form-label">Name</label>
             <input type="text" class="form-control" id="name" name="name" required>
@@ -18,8 +18,8 @@
             <label for="sex" class="form-label">Gender</label>
             <select class="form-control" required id="sex" name="sex">
                 <option value="" selected disabled>--Select Gender--</option>
-                <option value="Female">Female</option>
-                <option value="Male">Male</option>
+                <option value="女">女</option>
+                <option value="男">男</option>
             </select>
         </div>
 <div class="mb-3 form-group">

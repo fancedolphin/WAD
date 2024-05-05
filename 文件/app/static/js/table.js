@@ -25,6 +25,7 @@ function initTable(url) {
             total = table.length
         }
     });
+    console.log('接收数据',table);
     render(table)
 
     return table

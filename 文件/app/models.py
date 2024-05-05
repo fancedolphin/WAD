@@ -1,10 +1,9 @@
-from werkzeug.security import generate_password_hash, check_password_hash
-from flask_login import UserMixin
-from app import db
-from app import login_manager
+#from werkzeug.security import generate_password_hash, check_password_hash
+#from flask_login import UserMixin
+#from app import db
 
 
-# 管理员
+'''# 管理员
 class Manager(UserMixin,db.Model):
     MANAGER_NO = db.Column(db.String(8),primary_key=True)
     MANAGER_NAME = db.Column(db.String(10),nullable=False)
@@ -111,6 +110,7 @@ class Student(UserMixin,db.Model):
     # 取消选课
     def drop_course(self,COURSE_NO):
         course_drop = [course for course in self.COURSES if course.COURSE_NO==COURSE_NO][0]
+        print('course_drop',course_drop)
         self.COURSES.remove(course_drop)
 
 # 教师表
@@ -140,4 +140,4 @@ class Teacher(UserMixin,db.Model):
         self.TEACHER_PASSWORD = generate_password_hash(password)
 
     def check_password(self,password):
-        return check_password_hash(self.TEACHER_PASSWORD,password)
+        return check_password_hash(self.TEACHER_PASSWORD,password)'''

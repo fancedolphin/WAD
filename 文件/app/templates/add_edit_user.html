@@ -10,7 +10,7 @@
 <div class="edit-user-wrap form-wrapper">
     <form class="" method="post" action="{{action}}">
         <h1>{{Text}}<span class="head-title-text">{{head_text}}</span>User Information</h1>
-        <input type="hidden" name="csrf_token" id="csrf_token" value="{{csrf_token()}}">
+        
         <input type="hidden" name="user_type" id="user_type" value="{{user_type}}">
         <div class="form-error-msg">
             {% if get_flashed_messages() %}
