@@ -1,2 +1,6 @@
-flask~=2.0.3
-pymysql~=0.9.3
+flask==1.1.4
+wtforms==2.2.1
+pymysql==0.9.3
+flask-login==0.4.1
+markupsafe==2.0.1
+flask-cors==3.0.7

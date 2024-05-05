@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+      <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title></title>
+	<!-- Bootstrap Styles-->
+    <link href="assets/css/bootstrap.css" rel="stylesheet" />
+     <!-- FontAwesome Styles-->
+    <link href="assets/css/font-awesome.css" rel="stylesheet" />
+        <!-- Custom Styles-->
+    <link href="assets/css/custom-styles.css" rel="stylesheet" />
+     <!-- Google Fonts-->
+   <link href='https://fonts.googleapis.com/css?family=Open+Sans' rel='stylesheet' type='text/css' />
+</head>
+<body>
+    <div id="wrapper">
+        <nav class="navbar navbar-default top-navbar" role="navigation">
+            <div class="navbar-header">
+                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".sidebar-collapse">
+                    <span class="sr-only">Toggle navigation</span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+                <a class="navbar-brand" ><i class="fa fa-gear"></i> <strong>学生成绩管理系统</strong></a>
+            </div>
+
+            <ul class="nav navbar-top-links navbar-right">
+   
+                <!-- /.dropdown -->
+                <li class="dropdown">
+                    <a class="dropdown-toggle" data-toggle="dropdown" href="#" aria-expanded="false">
+                        <i class="fa fa-user fa-fw"></i> <i class="fa fa-caret-down"></i>
+                    </a>
+                    <ul class="dropdown-menu dropdown-user">
+                        <li><a onclick= logout()><i class="fa fa-sign-out fa-fw"></i> 退出登录</a>
+                        </li>
+                    </ul>
+                    <!-- /.dropdown-user -->
+                </li>
+                <!-- /.dropdown -->
+            </ul>
+        </nav>
+        <!--/. NAV TOP  -->
+        <nav class="navbar-default navbar-side" role="navigation">
+            <div class="sidebar-collapse">
+                <ul class="nav" id="main-menu">
+
+
+                    <li>
+                        <a  class="active-menu"><i class="fa fa-desktop"></i> 个人信息</a>
+                    </li>
+
+                    
+                    <li>
+                        <a style="cursor:pointer" id = "b"><i class="fa fa-table"></i> 课程管理</a>
+                    </li>
+                    
+                    <li>
+                        <a style="cursor:pointer" id = "c"><i class="fa fa-edit"></i> 修改密码</a>
+                    </li>
+
+                </ul>
+
+            </div>
+
+        </nav>
+        <!-- /. NAV SIDE  -->
+        <div id="page-wrapper" >
+            <div id="page-inner">
+			 <div class="row">
+                    <div class="col-md-12">
+                        <h1 class="page-header">
+                            	个人信息 
+                        </h1>
+                    </div>
+                </div> 
+                 <!-- /. ROW  -->
+				 
+				
+			<div class="row">
+
+			  <div class="col-md-12">
+			<div class="panel panel-default">
+    						  
+							<div class="panel-body"> 
+                                <label>工号</label>
+								<div class="alert alert-success" id = "id">
+                                </div>
+                                <label>姓名</label>
+								<div class="alert alert-info" id = "name">                                  
+                                </div>
+                                <label>性别</label>
+								<div class="alert alert-warning" id = "sex">
+                                </div>
+                                <label>出生年份</label>
+								<div class="alert alert-danger" id = "birth_year">
+                                </div>
+                                <label>所授课程数量</label>
+								<div class="alert alert-info" id = "number_of_courses">
+								</div>
+
+							</div>
+				</div>
+			</div>						
+				</div>								
+									
+                 <!-- /. ROW  -->
+			
+               
+                <!-- /. ROW  -->
+
+                 <!-- /. ROW  -->
+                
+
+                <!-- /. ROW  -->
+			
+				</div>
+             <!-- /. PAGE INNER  -->
+            </div>
+         <!-- /. PAGE WRAPPER  -->
+        </div>
+     <!-- /. WRAPPER  -->
+    <!-- JS Scripts-->
+    <!-- jQuery Js -->
+    <script src="assets/js/jquery-1.10.2.js"></script>
+      <!-- Bootstrap Js -->
+    <script src="assets/js/bootstrap.min.js"></script>
+    <!-- Metis Menu Js -->
+    <script src="assets/js/jquery.metisMenu.js"></script>
+      <!-- Custom Js -->
+    <script src="assets/js/custom-scripts.js"></script>
+    
+    <script type="text/javascript">
+        
+        document.getElementById("b").onclick = function () {
+        	window.location.href = "Teacher_Courses.html";
+        }
+        document.getElementById("c").onclick = function () {
+        	window.location.href = "Teacher_ChangePassword.html";
+        }
+
+        function logout()
+        {
+            if (confirm("您确定退出吗？")) {  
+                window.location.href = "Login.html";
+            }             
+        }
+
+	    var name = localStorage.getItem("name");
+    
+        var ajaxObj = new XMLHttpRequest();
+        ajaxObj.open('get', '/teacher/information?teacher_id='+name);
+        ajaxObj.send();
+        ajaxObj.onreadystatechange = function () {
+            if (ajaxObj.readyState == 4 && ajaxObj.status == 200) {
+                console.log('数据返回成功');
+                console.log(ajaxObj.responseText);
+
+			   var last=ajaxObj.responseText; //将JSON对象转化为JSON字符			 
+			   var obj = JSON.parse(last);
+
+			   document.getElementById("id").innerHTML = obj.teacher_id;
+			   document.getElementById("name").innerHTML = obj.teacher_name;
+			   document.getElementById("sex").innerHTML = obj.sex;
+			   document.getElementById("birth_year").innerHTML = obj.birth_year;
+			   document.getElementById("number_of_courses").innerHTML = obj.number_of_courses;
+			  
+            }
+            else if(ajaxObj.readyState == 4 && ajaxObj.status == 404) {
+				var last=ajaxObj.responseText; //将JSON对象转化为JSON字符
+				var obj = JSON.parse(last);
+				alert(obj.error);
+            }
+        }
+
+</script>
+ 
+</body>
+</html>

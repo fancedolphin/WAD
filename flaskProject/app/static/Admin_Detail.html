@@ -1,0 +1,167 @@
+
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+      <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title></title>
+	<!-- Bootstrap Styles-->
+    <link href="assets/css/bootstrap.css" rel="stylesheet" />
+     <!-- FontAwesome Styles-->
+    <link href="assets/css/font-awesome.css" rel="stylesheet" />
+        <!-- Custom Styles-->
+    <link href="assets/css/custom-styles.css" rel="stylesheet" />
+     <!-- Google Fonts-->
+   <link href='https://fonts.googleapis.com/css?family=Open+Sans' rel='stylesheet' type='text/css' />
+</head>
+<body>
+    <div id="wrapper">
+        <nav class="navbar navbar-default top-navbar" role="navigation">
+            <div class="navbar-header">
+                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".sidebar-collapse">
+                    <span class="sr-only">Toggle navigation</span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+                <a class="navbar-brand" ><i class="fa fa-gear"></i> <strong>学生成绩管理系统</strong></a>
+            </div>
+
+            <ul class="nav navbar-top-links navbar-right">
+   
+                <!-- /.dropdown -->
+                <li class="dropdown">
+                    <a class="dropdown-toggle" data-toggle="dropdown" href="#" aria-expanded="false">
+                        <i class="fa fa-user fa-fw"></i> <i class="fa fa-caret-down"></i>
+                    </a>
+                    <ul class="dropdown-menu dropdown-user">
+                        <li><a onclick=logout() style="cursor:pointer"><i class="fa fa-sign-out fa-fw"></i> 退出登录</a>
+                        </li>
+                    </ul>
+                    <!-- /.dropdown-user -->
+                </li>
+                <!-- /.dropdown -->
+            </ul>
+        </nav>
+        <!--/. NAV TOP  -->
+        <nav class="navbar-default navbar-side" role="navigation">
+            <div class="sidebar-collapse">
+                <ul class="nav" id="main-menu">
+
+
+                    <li>
+                        <a style="cursor:pointer" onclick=back()><i class="fa fa-desktop"></i> 返回</a>
+                    </li>
+
+                </ul>
+
+            </div>
+
+        </nav>
+        <!-- /. NAV SIDE  -->
+        <div id="page-wrapper" >
+            <div id="page-inner">
+			    <div class="row">
+                    <div class="col-md-12">
+                        <h1 class="page-header" id = "title"> </h1>
+                    </div>
+                </div> 
+                 <!-- /. ROW  -->
+				 
+				
+			<div class="row">
+			  <div class="col-md-12">
+			        <div class="panel panel-default" >
+				<div class="panel-body" id = "container"> 
+					
+				</div>
+				</div>
+			</div>						
+
+             <!-- /. PAGE INNER  -->
+            </div>
+         <!-- /. PAGE WRAPPER  -->
+        </div>
+     <!-- /. WRAPPER  -->
+    <!-- JS Scripts-->
+    <!-- jQuery Js -->
+    <script src="assets/js/jquery-1.10.2.js"></script>
+      <!-- Bootstrap Js -->
+    <script src="assets/js/bootstrap.min.js"></script>
+    <!-- Metis Menu Js -->
+    <script src="assets/js/jquery.metisMenu.js"></script>
+      <!-- Custom Js -->
+    <script src="assets/js/custom-scripts.js"></script>
+    <script src="js/admin_get_info.js">//获取具体信息</script>
+    <script src="js/admin_modify_info.js">//修改具体信息</script>
+    <script src="js/admin_delete_info.js">//删除</script>
+    <script src="js/admin_before_insert.js">//插入前获取某些可选择列表</script>
+    <script src="js/admin_insert.js">//插入</script>
+    <script src="js/create_element.js"></script>
+    
+    <script type="text/javascript">
+        function logout(){
+            if (confirm("您确定退出吗？")) {  
+                window.location.href = "Login.html";
+            }             
+        }
+        var current_detail_type = localStorage.getItem("current_type");
+        switch(current_detail_type) {
+        case "change_student":
+            var student_id =  localStorage.getItem("student_id");
+            getstudentinfo(student_id);
+            break;
+        case "change_teacher":
+            var teacher_id = localStorage.getItem("teacher_id");
+            getteacherinfo(teacher_id);
+            break;
+        case "change_course":
+            var course_id = localStorage.getItem("course_id");
+            getcourseinfo(course_id);
+            break;
+        case "change_major":
+            var major_id = localStorage.getItem("major_id");
+            getmajorinfo(major_id);
+            break;
+        case "change_major_course":
+            var major_id = localStorage.getItem("major_id");
+            var course_id = localStorage.getItem("course_id");
+            getmajorcourseinfo(major_id, course_id);
+            break;
+        case "add_student":
+            addstudent();
+            break;
+        case "add_teacher":
+            addteacher();
+            break;
+        case "add_course":
+            addcourse();
+            break;
+        case "add_major":
+            addmajor();
+            break;
+        case "add_major_course":
+            addmajorcourse();
+            break;
+        default:
+            break;
+        }
+
+        function back() {
+            var current_type = localStorage.getItem("current_type");
+            if (current_type.match("major_course")) {
+                localStorage.setItem("current_type", "major_course_info");
+            } else if (current_type.match("major")) {
+                localStorage.setItem("current_type", "major_info");
+            } else if (current_type.match("course")) {
+                localStorage.setItem("current_type", "course_info");
+            } else if (current_type.match("teacher")) {
+                localStorage.setItem("current_type", "teacher_info");
+            } else {
+                localStorage.setItem("current_type", "student_info");
+            }
+            window.location.href = "Admin_Info.html";
+        }
+	</script>
+</body>
+</html>

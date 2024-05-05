@@ -1,0 +1,253 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+      <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title></title>
+	<!-- Bootstrap Styles-->
+    <link href="assets/css/bootstrap.css" rel="stylesheet" />
+     <!-- FontAwesome Styles-->
+    <link href="assets/css/font-awesome.css" rel="stylesheet" />
+     <!-- Morris Chart Styles-->
+   
+        <!-- Custom Styles-->
+    <link href="assets/css/custom-styles.css" rel="stylesheet" />
+     <!-- Google Fonts-->
+   <link href='https://fonts.googleapis.com/css?family=Open+Sans' rel='stylesheet' type='text/css' />
+     <!-- TABLE STYLES-->
+    <link href="assets/js/dataTables/dataTables.bootstrap.css" rel="stylesheet" />
+</head>
+<body>
+    <div id="wrapper">
+        <nav class="navbar navbar-default top-navbar" role="navigation">
+            <div class="navbar-header">
+                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".sidebar-collapse">
+                    <span class="sr-only">Toggle navigation</span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+                <a class="navbar-brand"><i class="fa fa-gear"></i> <strong>学生成绩管理系统</strong></a>
+            </div>
+
+            <ul class="nav navbar-top-links navbar-right">
+ 
+                <!-- /.dropdown -->
+
+                <!-- /.dropdown -->
+  
+                <!-- /.dropdown -->
+                <li class="dropdown">
+                    <a class="dropdown-toggle" data-toggle="dropdown" href="#" aria-expanded="false">
+                        <i class="fa fa-user fa-fw"></i> <i class="fa fa-caret-down"></i>
+                    </a>
+                    <ul class="dropdown-menu dropdown-user">
+                        <li><a onclick=logout() style="cursor:pointer"><i class="fa fa-sign-out fa-fw"></i> 退出登录</a>
+                        </li>
+                    </ul>
+                    <!-- /.dropdown-user -->
+                </li>
+                <!-- /.dropdown -->
+            </ul>
+        </nav>
+        <!--/. NAV TOP  -->
+        <nav class="navbar-default navbar-side" role="navigation">
+            <div class="sidebar-collapse">
+                <ul class="nav" id="main-menu">
+
+                    <li>
+                        <a style="cursor:pointer" id = "a"><i class="fa fa-desktop"></i> 个人信息</a>
+                    </li>
+                  
+                    <li>
+                        <a class="active-menu"><i class="fa fa-table" ></i> 成绩</a>
+                    </li>
+                    
+                    <li>
+                        <a style="cursor:pointer" id = "c"><i class="fa fa-edit" ></i> 修改密码</a>
+                    </li>
+
+                </ul>
+
+            </div>
+
+        </nav>
+        <!-- /. NAV SIDE  -->
+        <div id="page-wrapper" >
+            <div id="page-inner">
+			 <div class="row">
+                    <div class="col-md-12">
+                        <h1 class="page-header">
+                            	成绩 
+                        </h1>
+                    </div>
+                </div> 
+                 <!-- /. ROW  -->
+               
+            <div class="row">
+                <div class="col-md-12">
+                    <!-- Advanced Tables -->
+                    <div class="panel panel-default">
+
+                        <div class="panel-body">
+                            <div class="table-responsive" id = "container">
+                            </div>
+                            
+                        </div>
+                    </div>
+                    <!--End Advanced Tables -->
+                </div>
+            </div>
+                <!-- /. ROW  -->
+      
+                <!-- /. ROW  -->
+
+                <!-- /. ROW  -->
+
+                <!-- /. ROW  -->
+             <!-- /. PAGE INNER  -->
+            </div>
+         <!-- /. PAGE WRAPPER  -->
+     <!-- /. WRAPPER  -->
+    <!-- JS Scripts-->
+    <!-- jQuery Js -->
+    <script src="assets/js/jquery-1.10.2.js"></script>
+      <!-- Bootstrap Js -->
+    <script src="assets/js/bootstrap.min.js"></script>
+    <!-- Metis Menu Js -->
+    <script src="assets/js/jquery.metisMenu.js"></script>
+     <!-- DATA TABLE SCRIPTS -->
+    <script src="assets/js/dataTables/jquery.dataTables.js"></script>
+    <script src="assets/js/dataTables/dataTables.bootstrap.js"></script>
+        <script>
+            $(document).ready(function () {
+                $('#dataTables-example').dataTable();
+            });
+    </script>
+         <!-- Custom Js -->
+    <script src="assets/js/custom-scripts.js"></script>
+    
+   
+    
+    <script type="text/javascript">
+        
+        document.getElementById("a").onclick = function () {
+        	window.location.href = "Student_Info.html";
+        }
+        document.getElementById("c").onclick = function () {
+        	window.location.href = "Student_ChangePassword.html";
+        }
+
+        function logout()
+        {
+            if (confirm("您确定退出吗？")) {  
+                window.location.href = "Login.html";
+            }             
+        }
+
+        var name=localStorage.getItem("name"); 
+        
+        var ajaxObj = new XMLHttpRequest();
+
+        ajaxObj.open('get', '/student/courses_selected?student_id='+name);
+
+        ajaxObj.send();
+
+        ajaxObj.onreadystatechange = function () {
+            if (ajaxObj.readyState == 4 && ajaxObj.status == 200) {
+                console.log('数据返回成功');
+                console.log(ajaxObj.responseText);
+
+                var last=ajaxObj.responseText; //将JSON对象转化为JSON字符
+                
+                var obj = JSON.parse(last);
+                var courses = obj.courses;
+                var container = document.getElementById("container");
+                var table=document.createElement("table");
+                table.className = "table table-striped table-bordered table-hover";
+
+                var thead = document.createElement('thead');
+                var row = document.createElement('tr');
+                
+                // 创建td单元格
+                var course_id = document.createElement('td');
+                var course_name = document.createElement('td');
+                var year = document.createElement('td');
+                var semester = document.createElement('td');
+                var teacher_name = document.createElement('td');
+                var credit = document.createElement('td');
+                var grade = document.createElement('td');
+             //   var deletecourse = document.createElement('td');
+
+                course_id.innerHTML = "课程编号";
+                course_name.innerHTML = "课程名称";
+                year.innerHTML = "开课学年";
+                semester.innerHTML = "开课学期";
+                teacher_name.innerHTML = "任课老师";  
+                credit.innerHTML = "学分";
+                grade.innerHTML = "成绩";
+               
+
+                
+                
+                row.appendChild(course_id);
+                row.appendChild(course_name);
+                row.appendChild(year);
+                row.appendChild(semester);
+                row.appendChild(teacher_name);
+                row.appendChild(credit);
+                row.appendChild(grade);
+                
+                thead.appendChild(row);
+                table.appendChild(thead);
+                var tbody = document.createElement('tbody');
+                for (var i = 0; i < courses.length; i++) {
+                    //result[i]表示获得第i个json对象即JSONObject
+                    //result[i]通过.字段名称即可获得指定字段的值
+                    
+                    var row = document.createElement('tr');
+                    
+                    // 创建td单元格
+                    var course_id = document.createElement('td');
+                    var course_name = document.createElement('td');
+                    var year = document.createElement('td');
+                    var semester = document.createElement('td');
+                    var teacher_name = document.createElement('td');
+                    var credit = document.createElement('td');
+                    var grade = document.createElement('td');
+                    
+                    course_id.innerHTML = courses[i].course_id;
+                    course_name.innerHTML = courses[i].course_name;
+                    year.innerHTML = courses[i].year;
+                    semester.innerHTML = courses[i].semester;
+                    teacher_name.innerHTML = courses[i].teacher_name;
+                    credit.innerHTML = courses[i].credit;
+                    grade.innerHTML = courses[i].grade;
+
+                    row.appendChild(course_id);
+                    row.appendChild(course_name);
+                    row.appendChild(year);
+                    row.appendChild(semester);
+                    row.appendChild(teacher_name);
+                    row.appendChild(credit);
+                    row.appendChild(grade);
+                    
+                    tbody.appendChild(row);
+                    
+                        
+                }
+                table.appendChild(tbody);
+                container.appendChild(table);
+            }
+            else if(ajaxObj.readyState == 4 && ajaxObj.status == 404) {
+				var last=ajaxObj.responseText; //将JSON对象转化为JSON字符
+				var obj = JSON.parse(last);
+				alert(obj.error);
+            }
+        }
+
+</script>
+    
+   
+</body>
+</html>
